@@ -41,7 +41,7 @@
 			<h2>Donate to <span id="donate_artist_name"></span>!</h2>
 			<input type="text" class="donatebox" id="donatebox">
 			<span id="currency">BTC</span>
-			<button class="button" id="donate">Donate !</button>
+			<button class="button" id="donate" style="width: 135px;">Donate !</button>
 		</div>
 	</div>
 
@@ -143,7 +143,7 @@
 										$("#success_currency").html($("#currency").text());
 										$("#success_amount").html($("#donatebox").val());
 										$("#success_txid").html(res.result);
-										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", closeButton: false, opacity: "0.8" });
+										$.colorbox({ inline: true, href: $("#donation_done"), width: "75%", closeButton: false, opacity: "0.8" });
 									}
 								);
 
@@ -157,7 +157,7 @@
 							});
 
 							$("#donate_artist_name").html($( this ).data('artist_name'));
-							$.colorbox({ inline: true, href: $("#inline_content"), width: "70%", closeButton: false, opacity: 0.8 });
+							$.colorbox({ inline: true, href: $("#inline_content"), width: "75%", closeButton: false, opacity: 0.8 });
 
 						} else {
 							alert("Artist not registered with Donefy!");
@@ -179,22 +179,24 @@
 				$("#inline_content").css("background","#f7931a");
 				$("#donation_done").css("background","#f7931a");
 				$("html").css("font-family","Arial");
-				$("h2").css("font-family","Arial");
+				$("#inline_content > h2").css("font-family","Arial");
+				$("#inline_content > h1").css("font-family","Arial");
 				$("#currency").text("BTC");
-        $("#donate").text("Donate");
+				$("#inline_content > #donate").text("Donate");
+				$("#inline_content > #donate").css("font-family","Arial");
 			});
 
 			$("#doge").hover(function() {
-				$("#inline_content").css("background","#ba9f33")
-				$("#donation_done").css("background","#ba9f33")
-				$("html").css("font-family","Comic Sans MS")
-				$("h2").css("font-family","Comic Sans MS")
-				$("h1").css("font-family","Comic Sans MS")
+				$("#inline_content").css("background","#ba9f33");
+				$("#donation_done").css("background","#ba9f33");
+//				$("body").css("font-family","Comic Sans MS");
+				$("#inline_content > h2").css("font-family","Comic Sans MS");
+				$("#inline_content > h1").css("font-family","Comic Sans MS");
 
-        $("div").css("font-family","Comic Sans MS")
+//			        $("div").css("font-family","Comic Sans MS");
 				$("#currency").text("DOGE");
-        $("#donate").text("much donate");
-        	$("#donate").css("font-family","Comic Sans MS")
+			        $("#donate").text("much donate");
+				$("#inline_content > #donate").css("font-family","Comic Sans MS");
 
 			});
 
