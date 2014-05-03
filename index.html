@@ -143,7 +143,7 @@
 										$("#success_currency").html($("#currency").text());
 										$("#success_amount").html($("#donatebox").val());
 										$("#success_txid").html(res.result);
-										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", opacity: "0.8" });
+										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", closeButton: false, opacity: "0.8" });
 									}
 								);
 
@@ -154,8 +154,6 @@
 
 								$("#inline_content").hide();
 								
-								alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
-
 							});
 
 							$("#donate_artist_name").html($( this ).data('artist_name'));
