@@ -11,21 +11,28 @@
         
     </head>
     <body>
-	<div id="wrapper">
+<div id="wrapper" style="margin-left: -12px;">
 		<div id="index" class="section">
 
-<input type="text" value="Search!" id="searchfield">
+<img src="img/menu.png"> <span id="search"><input type="text" value="Search!" id="searchfield"></span>
             
 		</div>
-    <span id ="search"><img src="img/menu.png"></span>
+   
 	</div>
-          <h1>Donefy - donate crypto currencies to your favourite artists! </h1>
+  
+<img src="img/logo2.png" style="width:200px; height:200px; position:relative; margin-right: 300px;/* text-align:center */left: 404px;top: -24px;">  
+   <p>
+   <p>
+<h1 style="
+    left: 5px;
+    top: 2px;
+    color:white;
+">Donefy - makes it easy to donate! </h1><hr style="background-color:black;color:black;border: 1px solid black;width: 88%;">
+<br>
+<br>
 	<!-- <a href="#inline_content" id="col">colortst</a> -->
 	<div id="toplist-artists"></div>
        
-       	<script> 
-         
-         </script>    
         	<div style='display:none'>
     <div id="coins">
     
@@ -41,7 +48,7 @@
                               
    <h2> Donate amount below ! </h2>
     <input type="text" class="donatebox" id="donatebox">   <span id="currency">BTC</span>
-    <button id="donate">Donate !</button>
+ <button id="donate">Donate !</button>
 			</div>
 		</div>
         
@@ -82,7 +89,7 @@
 			// Hardcode Dunderpatrullen -.-
 			promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
 
-			for (var i = 0, l = artists.length; i < l; i++) {
+			for (var i = 0, l = artists.length; i < 10; i++) {
 			    var artist = artists.get(i);
 			    promises.push(artist.load('uri', 'name', 'image'));
 			}
@@ -108,7 +115,7 @@
 				link.appendChild(image);
 				link.appendChild(a);
 
-				$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "'>Donate!</a>");
+				$( link ).append("<div class='bu'><a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' style='margin-right:200px;'><button class='button'>Donate!</button></a></div>");
 
 				artistsFragment.appendChild(link);
 
@@ -157,15 +164,17 @@
 
 			$("#btc").hover(function() {
 				$("#inline_content").css("background","#f7931a");
-				$("body").css("font-family","Arial");
+				$("html").css("font-family","Arial");
 				$("h2").css("font-family","Arial");
+       // $("h1").css("font-family","Arial");
 				$("#currency").text("BTC");
 			});
 
 			$("#doge").hover(function() {
 				$("#inline_content").css("background","#ba9f33")
-				$("body").css("font-family","Comic Sans MS")
+				$("html").css("font-family","Comic Sans MS")
 				$("h2").css("font-family","Comic Sans MS")
+        $("h1").css("font-family","Comic Sans MS")
 				$("#currency").text("DOGE");
 				//$("h2").html("Dogenate amount below!")
 			});

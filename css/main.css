@@ -4,8 +4,11 @@ body {
 	font-size: 12px;
 	line-height: 1.584;
 	color: #222;
-	background-color: rgb(255,153,255);
-}
+	 background-color: rgb(255,153,255); 
+   /* background-color: #3d4259; */
+   background-color: #121212;
+   margin:0;
+  }
 
 a {
 	color: #333;
@@ -13,12 +16,16 @@ a {
 }
 
 h1 {
-	font-size: 40px;
+	font-size: 30px;
+margin-left: 254px;
+top: -38px;
+position: relative;
+font-family:"Microsoft Yi Baiti"
+color:white;
 }
-
+                                
 h1, h2, h3 {
-	margin-top: 1em;
-	margin-bottom: 1em;
+	
 }
 
 h1, h2, h3, h4, h5, h6, .hdr-xxl, .hdr-xl, .hdr-l, .hdr-m, .hdr-sm, .hdr-xsm {
@@ -84,7 +91,9 @@ list-style-type: none;
 
 }
 
-.bandname {font-family: Helvetica; font-size:18px; color: white;}
+.bandname {font-family: Helvetica; font-size:48px; color: white; top: -136px;
+position: relative;
+left: 45px;}
 
 .donatebox {height: 35px;
 width: 350px;
@@ -103,4 +112,49 @@ font-size: 20px;}
 
 #searchfield {height:40px; width:140px; border-radius:5px; border:1px black solid;}
 
-#toplist-artists {padding-left:240px}
+#toplist-artists {padding-left:140px}
+
+#search {top: -27px;
+position: relative;}
+
+.button {
+   border-top: 1px solid #5c5000;
+   background: #bd7004;
+   background: -webkit-gradient(linear, left top, left bottom, from(#c48d20), to(#bd7004));
+   background: -webkit-linear-gradient(top, #c48d20, #bd7004);
+   background: -moz-linear-gradient(top, #c48d20, #bd7004);
+   background: -ms-linear-gradient(top, #c48d20, #bd7004);
+   background: -o-linear-gradient(top, #c48d20, #bd7004);
+   padding: 11.5px 23px;
+   -webkit-border-radius: 16px;
+   -moz-border-radius: 16px;
+   border-radius: 16px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: white;
+   font-size: 15px;
+   font-family: Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   border: 1px solid black;
+   }
+.button:hover {
+   border-top-color: #bd7004;
+   background: #bd7004;
+   color: #ccc;
+   }
+.button:active {
+   border-top-color: #5c371b;
+   background: #5c371b;
+   }
+   
+
+.bu  {
+position: relative;
+top: -130px;
+left: 246px
+
+
+}
