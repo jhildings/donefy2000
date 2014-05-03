@@ -1,0 +1,117 @@
+<div class="section">
+ 
+  
+               <a href="#inline_content" id="col">colortst</a>
+         <div id="toplist-artists"></div>
+        
+    <script type="script/snippet" data-container="js">
+        require(['$api/toplists#Toplist'], function(Toplist) {
+            var toplist = Toplist.forCurrentUser();
+
+
+            // top artists
+            toplist.artists.snapshot().done(function(artists) {
+                var promises = [];
+                for (var i = 0, l = artists.length; i < l; i++) {
+                    var artist = artists.get(i);
+                    promises.push(artist.load('uri', 'name','image'));
+                }
+
+                models.Promise.join(promises).done(function(artistsPromises) {
+                    var artistsFragment = document.createDocumentFragment();
+                    artistsPromises.forEach(function(ap) {
+                        var link = document.createElement('li');
+                        var img = document.createElement('img');
+                        var a = document.createElement('a');
+                        
+                   
+                        var image = new Image(ap.image);
+                        image.height = 200;
+                        image.width = 200;
+                        image.src = ap.image;
+//
+                   //     console.log(image)
+                        a.href = ap.uri;
+                        a.innerHTML = ap.name.decodeForHtml();
+                        a.className = "bandname";
+                        link.appendChild(image);
+                        link.appendChild(a);
+                        var ht = "Donate!";
+                        var hta =  document.createElement('span');
+                        hta.innerHTML = "<span>" + ht +"</span>";;
+                        link.appendChild(hta);
+                        
+
+                        link.appendChild(img);
+                        artistsFragment.appendChild(link);
+                    });
+                    document.getElementById('toplist-artists').appendChild(artistsFragment);
+                });
+            });
+
+
+        });
+        
+      				$("#col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
+              $("#donate").click(function() {
+              $("#inline_content").html = $("#donatebox").val() + "donated!";
+              alert( $("#donatebox").val() + "  donated");
+              });
+              
+              
+               $("#btc").click(function() {
+              $("#inline_content").css("background","#f7931a")
+              });
+              
+              
+                 
+                    $("#btc").hover(function() {
+              $("#inline_content").css("background","#f7931a")
+              }, function() {
+       $("#inline_content").css("background","white")
+           
+   });
+   
+               
+                    $("#doge").hover(function() {
+              $("#inline_content").css("background","#ba9f33")
+                   //$("h2").html("Dogenate amount below!")
+              }, function() {
+       $("#inline_content").css("background","white")
+   
+           
+   });
+                 $("#doge").click(function() {
+              $("#inline_content").css("background","#ba9f33")
+              });
+              
+         
+              //ba9f33
+              
+              
+              $('#doge').bind('click hover', function () {
+    $("#inline_content").css("background","#ba9f33")
+          
+});
+    </script>
+    
+    <!-- This contains the hidden content for inline calls -->
+		<div style='display:none'>
+    <div id="coins">
+    
+  
+    </div>
+   
+			<div id='inline_content' style='padding:10px;background:white;'>
+	
+		                          <img src="img/btc.png" class="donate" id="btc">
+                              <img src="img/doge.png" class="donate" id="doge">
+                              
+                              
+                              
+   <h2> Donate amount below ! </h2>
+    <input type="text" class="donatebox" id="donatebox">   BTC
+    <button id="donate">
+			</div>
+		</div>
+</div>
