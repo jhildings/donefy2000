@@ -143,7 +143,7 @@
 										$("#success_currency").html($("#currency").text());
 										$("#success_amount").html($("#donatebox").val());
 										$("#success_txid").html(res.result);
-										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", opacity: "0.8" });
+										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", closeButton: false, opacity: "0.8" });
 									}
 								);
 
@@ -154,8 +154,6 @@
 
 								$("#inline_content").hide();
 								
-								alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
-
 							});
 
 							$("#donate_artist_name").html($( this ).data('artist_name'));
@@ -173,34 +171,41 @@
 
 			$("#btc").click(function() {
 				$("#inline_content").css("background","#f7931a");
+				$("#donation_done").css("background","#f7931a");
 				$("#currency").text("BTC");
 			});
 
 			$("#btc").hover(function() {
 				$("#inline_content").css("background","#f7931a");
+				$("#donation_done").css("background","#f7931a");
 				$("html").css("font-family","Arial");
 				$("h2").css("font-family","Arial");
-       // $("h1").css("font-family","Arial");
 				$("#currency").text("BTC");
+        $("#donate").text("Donate");
 			});
 
 			$("#doge").hover(function() {
 				$("#inline_content").css("background","#ba9f33")
+				$("#donation_done").css("background","#ba9f33")
 				$("html").css("font-family","Comic Sans MS")
 				$("h2").css("font-family","Comic Sans MS")
-        $("h1").css("font-family","Comic Sans MS")
+				$("h1").css("font-family","Comic Sans MS")
+        $("div").css("font-family","Comic Sans MS")
 				$("#currency").text("DOGE");
-				//$("h2").html("Dogenate amount below!")
+        $("#donate").text("much donate");
+        	$("#donate").css("font-family","Comic Sans MS")
 			});
 
 			$("#doge").click(function() {
 				$("#inline_content").css("background","#ba9f33");
+				$("#donation_done").css("background","#ba9f33");
 				$("#currency").text("DOGE");
 			});
 
 
 			$('#doge').bind('click hover', function () {
 				$("#inline_content").css("background","#ba9f33");
+				$("#donation_done").css("background","#ba9f33");
 			});
 
 		});
