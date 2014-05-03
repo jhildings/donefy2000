@@ -171,34 +171,37 @@
 
 			$("#btc").click(function() {
 				$("#inline_content").css("background","#f7931a");
+				$("#donation_done").css("background","#f7931a");
 				$("#currency").text("BTC");
 			});
 
 			$("#btc").hover(function() {
 				$("#inline_content").css("background","#f7931a");
+				$("#donation_done").css("background","#f7931a");
 				$("html").css("font-family","Arial");
 				$("h2").css("font-family","Arial");
-       // $("h1").css("font-family","Arial");
 				$("#currency").text("BTC");
 			});
 
 			$("#doge").hover(function() {
 				$("#inline_content").css("background","#ba9f33")
+				$("#donation_done").css("background","#ba9f33")
 				$("html").css("font-family","Comic Sans MS")
 				$("h2").css("font-family","Comic Sans MS")
-        $("h1").css("font-family","Comic Sans MS")
+				$("h1").css("font-family","Comic Sans MS")
 				$("#currency").text("DOGE");
-				//$("h2").html("Dogenate amount below!")
 			});
 
 			$("#doge").click(function() {
 				$("#inline_content").css("background","#ba9f33");
+				$("#donation_done").css("background","#ba9f33");
 				$("#currency").text("DOGE");
 			});
 
 
 			$('#doge').bind('click hover', function () {
 				$("#inline_content").css("background","#ba9f33");
+				$("#donation_done").css("background","#ba9f33");
 			});
 
 		});
