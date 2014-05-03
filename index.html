@@ -30,39 +30,36 @@
 ">Donefy - makes it easy to donate! </h1><hr style="background-color:black;color:black;border: 1px solid black;width: 88%;">
 <br>
 <br>
-	<!-- <a href="#inline_content" id="col">colortst</a> -->
+
 	<div id="toplist-artists"></div>
        
-        	<div style='display:none'>
-    <div id="coins">
-    
-  
-    </div>
-   
-			<div id='inline_content' style='padding:10px;background:white;'>
+	<div style='display:none'>
+		<div id="coins"></div>
+ 
+		<div id='inline_content' style='padding:10px;background:white;'>
 	
-		                          <img src="img/btc.png" class="donate" id="btc">
-                              <img src="img/doge.png" class="donate" id="doge">
-                              
-                              
-                              
-   <h2> Donate amount below ! </h2>
-    <input type="text" class="donatebox" id="donatebox">   <span id="currency">BTC</span>
- <button id="donate">Donate !</button>
-			</div>
+			<img src="img/btc.png" class="donate" id="btc">
+			<img src="img/doge.png" class="donate" id="doge">
+
+			<h2>Donate to <span id="donate_artist_name"></span>!</h2>
+			<input type="text" class="donatebox" id="donatebox">
+			<span id="currency">BTC</span>
+			<button id="donate">Donate !</button>
 		</div>
-        
-        
-        
-        <script src="/js/rainbow-custom.min.js"></script>
-        <script src="/js/tutorial.js"></script>
+	</div>
+
+	<script src="/js/rainbow-custom.min.js"></script>
+	<script src="/js/tutorial.js"></script>
 
 	<script>
 
 		var BACKEND_URI = "http://193.13.100.197:5556/";
 
 		var ARTIST_ACCOUNTS = {
-			'spotify:artist:1PXHzxRDiLnjqNrRn2Xbsa': 'mu8KfJLHQo1a3HLEfYdVxnF8WsR2KxBr6k'
+			// Underworld
+			'spotify:artist:1PXHzxRDiLnjqNrRn2Xbsa': 'mu8KfJLHQo1a3HLEfYdVxnF8WsR2KxBr6k',
+			// Dunderpatrullen
+			'spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8': 'derp'
 		};
 		
 
@@ -79,83 +76,89 @@
 
 		require(['$api/toplists#Toplist','$api/models', '$api/models#Artist'], function(Toplist, models, Artist) {
 
-		    var toplist = Toplist.forCurrentUser();
+			var toplist = Toplist.forCurrentUser();
 
-		    // top artists
-		    toplist.artists.snapshot().done(function(artists) {
+			// top artists
+			toplist.artists.snapshot().done(function(artists) {
 
 			var promises = [];
 
 			// Hardcode Dunderpatrullen -.-
 			promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
 
-			for (var i = 0, l = artists.length; i < 10; i++) {
-			    var artist = artists.get(i);
-			    promises.push(artist.load('uri', 'name', 'image'));
+			for (var i = 0, l = 10; i < l; i++) {
+				var artist = artists.get(i);
+				promises.push(artist.load('uri', 'name', 'image'));
 			}
 
 			models.Promise.join(promises).done(function(artistsPromises) {
 
-			    var artistsFragment = document.createDocumentFragment();
+				var artistsFragment = document.createDocumentFragment();
 
-			    artistsPromises.forEach(function(ap) {
+				artistsPromises.forEach(function(ap) {
 
-				var link = document.createElement('li');
-				var a = document.createElement('a');
+					var link = document.createElement('li');
+					var a = document.createElement('a');
 
-				var image = new Image(ap.image);
-				image.height = 200;
-				image.width = 200;
-				image.src = ap.image;
+					var image = new Image(ap.image);
+					image.height = 200;
+					image.width = 200;
+					image.src = ap.image;
 
-				a.href = ap.uri;
-				a.innerHTML = ap.name.decodeForHtml();
-				a.className = "bandname";
+					a.href = ap.uri;
+					a.innerHTML = ap.name.decodeForHtml();
+					a.className = "bandname";
 
-				link.appendChild(image);
-				link.appendChild(a);
+					link.appendChild(image);
+					link.appendChild(a);
 
-				$( link ).append("<div class='bu'><a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' style='margin-right:200px;'><button class='button'>Donate!</button></a></div>");
+				$( link ).append("<div class='bu'><a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "' style='margin-right:200px;'><button class='button'>Donate!</button></a></div>");
 
-				artistsFragment.appendChild(link);
+					artistsFragment.appendChild(link);
 
-			    });
+				});
 
-			    $('#toplist-artists').append(artistsFragment);
+				$('#toplist-artists').append(artistsFragment);
 
-			    $(".donate_artist").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+				$(".donate_artist").click(function () {
 
+					if ($( this ).data('artist_id') in ARTIST_ACCOUNTS) {
+
+						var bitcoinaddress = ARTIST_ACCOUNTS[$( this ).data('artist_id')];
+
+						$("#donate").click(function() {
+
+							$("#inline_content").html = $("#donatebox").val() + "donated!";
+
+							// To artist
+							sendToAddress(bitcoinaddress, $("#donatebox").val()*0.98,
+								function(res) { alert("derpaderp" + res.result); }
+							);
+
+							// Our share
+							sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
+								function(res) { return; }
+							);  
+							
+							alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
+							
+							console.log($("#currency").text());
+							$("#inline_content").hide();
+
+						});
+
+						$("#donate_artist_name").html($( this ).data('artist_name'));
+						$.colorbox({ inline: true, href: $("#inline_content"), inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+
+					} else {
+						alert("Artist not registered with Donefy!");
+					}
+				});
 			});
 		    });
-
-
-
 		});
 
 		$(function() {
-
-			// O HAI!
-			$("#donate").click(function() {
-				$("#inline_content").html = $("#donatebox").val() + "donated!";
-
-				sendToAddress("miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV",$("#donatebox").val()*0.98,
-					function(res) {
-						alert("derpaderp" + res.result);
-					}
-				);
-
-				sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
-					function(res) {
-						return;
-					}
-				);  
-				
-				alert( $("#donatebox").val() +     $("#currency").text() + "  donated, thank you !");
-				
-				console.log($("#currency").text());
-				$("#inline_content").hide();
-			});
-
 
 			$("#btc").click(function() {
 				$("#inline_content").css("background","#f7931a");
@@ -191,8 +194,5 @@
 
 		});
 	</script>      
-  
-  
-  
     </body>
 </html>
