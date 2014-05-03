@@ -17,5 +17,27 @@
         </div>
         <script src="/js/rainbow-custom.min.js"></script>
         <script src="/js/tutorial.js"></script>
+
+	<script>
+
+		var BACKEND_URI = "http://193.13.100.197:5556/";
+		
+		function sendToAddress(bitcoinaddress, amount, callback) {
+			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
+		}
+
+		function getInfo(callback) {
+
+			$.getJSON(BACKEND_URI + 'getinfo')
+				.done(callback);
+		}
+
+		$(function() {
+
+			// O HAI!
+
+		});
+
+	</script>
     </body>
 </html>
