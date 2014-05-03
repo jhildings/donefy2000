@@ -11,58 +11,67 @@
         
     </head>
     <body>
-        <div id="wrapper">
-            <div id="index" class="section">
-            <a href="spotify:app:donefy2000:user:toplist">aa</a>
-          
-            </div>
-        </div>
-       <a href="#inline_content" id="col">colortst</a>
+	<div id="wrapper">
+		<div id="index" class="section">
+			<a href="spotify:app:donefy2000:user:toplist">aa</a>
+		</div>
+	</div>
+	<a href="#inline_content" id="col">colortst</a>
+	<div id="toplist-artists"></div>
        
        	<script> 
          
-         $("#col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
-  
+        require(['$api/toplists#Toplist','$api/models', '$api/models#Artist'], function(Toplist, models, Artist) {
 
-        require(['$api/toplists#Toplist','$api/models'], function(Toplist,models) {
             var toplist = Toplist.forCurrentUser();
-
 
             // top artists
             toplist.artists.snapshot().done(function(artists) {
+
                 var promises = [];
+
+		// Hardcode Dunderpatrullen -.-
+		promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
+
                 for (var i = 0, l = artists.length; i < l; i++) {
                     var artist = artists.get(i);
-                    promises.push(artist.load('uri', 'name','image'));
+                    promises.push(artist.load('uri', 'name', 'image'));
                 }
 
                 models.Promise.join(promises).done(function(artistsPromises) {
+
                     var artistsFragment = document.createDocumentFragment();
+
                     artistsPromises.forEach(function(ap) {
+
                         var link = document.createElement('li');
-                        var img = document.createElement('img');
                         var a = document.createElement('a');
-                        
-                   
+
                         var image = new Image(ap.image);
                         image.height = 200;
                         image.width = 200;
                         image.src = ap.image;
+
                         a.href = ap.uri;
                         a.innerHTML = ap.name.decodeForHtml();
                         a.className = "bandname";
+
                         link.appendChild(image);
                         link.appendChild(a);
-                        var ht = "Donate!";
-                        var hta =  document.createElement('span');
-                        hta.innerHTML = "<span id='donate' data-artist_id='" + ap.uri + "'>" + ht +"</span>";;
-                        link.appendChild(hta);
-                        link.appendChild(img);
+
+                        $( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "'>Donate!</a>");
+
                         artistsFragment.appendChild(link);
+
                     });
-                    document.getElementById('toplist-artists').appendChild(artistsFragment);
+
+                    $('#toplist-artists').append(artistsFragment);
+
+        	    $(".donate_artist").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+
                 });
             });
+
 
 
         });
@@ -94,7 +103,12 @@
 	<script>
 
 		var BACKEND_URI = "http://193.13.100.197:5556/";
-	//	miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV
+
+		var ARTIST_ACCOUNTS = {
+			'spotify:artist:1PXHzxRDiLnjqNrRn2Xbsa': 'mu8KfJLHQo1a3HLEfYdVxnF8WsR2KxBr6k'
+		};
+		
+
 		function sendToAddress(bitcoinaddress, amount, callback) {
 			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
       
