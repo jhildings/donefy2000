@@ -81,8 +81,8 @@
                               
                               
    <h2> Donate amount below ! </h2>
-    <input type="text" class="donatebox" id="donatebox">   BTC
-    <button id="donate">
+    <input type="text" class="donatebox" id="donatebox">   <span id="currency">BTC</span>
+    <button id="donate">Donate !</button>
 			</div>
 		</div>
         
@@ -94,9 +94,10 @@
 	<script>
 
 		var BACKEND_URI = "http://193.13.100.197:5556/";
-		
+	//	miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV
 		function sendToAddress(bitcoinaddress, amount, callback) {
 			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
+      
 		}
 
 		function getInfo(callback) {
@@ -110,7 +111,59 @@
 			// O HAI!
 
 		});
-
+     $("#donate").click(function() {
+			  	$("#inline_content").html = $("#donatebox").val() + "donated!";
+          sendToAddress("miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV",$("#donatebox").val()*0.98 ,function(res)
+                  {
+                  alert("derpaderp" + res.result);
+                  
+                  });
+          sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr",$("#donatebox").val()*0.02 ,function(res)
+                  {
+                      return;
+                  
+                  });  
+			alert( $("#donatebox").val() +     $("#currency").text() + "  donated, thank you !");
+      console.log($("#currency").text())
+     	$("#inline_content").hide(); 
+		});
+    
+                 
+               $("#btc").click(function() {
+              $("#inline_content").css("background","#f7931a")
+              $("#currency").text("BTC");
+              });
+              
+              
+                 
+                    $("#btc").hover(function() {
+              $("#inline_content").css("background","#f7931a")
+                $("body").css("font-family","Arial")
+                $("h2").css("font-family","Arial")
+                 $("#currency").text("BTC");
+              });
+   
+               
+                    $("#doge").hover(function() {
+              $("#inline_content").css("background","#ba9f33")
+              $("body").css("font-family","Comic Sans MS")
+                $("h2").css("font-family","Comic Sans MS")
+              $("#currency").text("DOGE");
+                   //$("h2").html("Dogenate amount below!")
+              });
+                 $("#doge").click(function() {
+              $("#inline_content").css("background","#ba9f33")
+              $("#currency").text("DOGE");
+              });
+              
+         
+              //ba9f33
+              
+              
+              $('#doge').bind('click hover', function () {
+    $("#inline_content").css("background","#ba9f33")
+          
+});    
 	</script>      
   
   
