@@ -90,17 +90,11 @@
 				// Hardcode Dunderpatrullen -.-
 				promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
 
-<<<<<<< HEAD
 			for (var i = 0, l = 10; i < l; i++) {
 				var artist = artists.get(i);
 				promises.push(artist.load('uri', 'name', 'image'));
 			}
-=======
-				for (var i = 0, l = artists.length; i < l; i++) {
-					var artist = artists.get(i);
-					promises.push(artist.load('uri', 'name', 'image'));
-				}
->>>>>>> 5eb1fbc625bb15d707e63e6e9c1377baa23039fa
+
 
 				models.Promise.join(promises).done(function(artistsPromises) {
 
@@ -123,11 +117,9 @@
 						link.appendChild(image);
 						link.appendChild(a);
 
-<<<<<<< HEAD
+
 				$( link ).append("<div class='bu'><a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "' style='margin-right:200px;'><button class='button'>Donate!</button></a></div>");
-=======
-						$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "'>Donate!</a>");
->>>>>>> 5eb1fbc625bb15d707e63e6e9c1377baa23039fa
+
 
 						artistsFragment.appendChild(link);
 
