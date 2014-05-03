@@ -16,30 +16,25 @@
 			<a href="spotify:app:donefy2000:user:toplist">aa</a>
 		</div>
 	</div>
+
 	<a href="#inline_content" id="col">colortst</a>
+
 	<div id="toplist-artists"></div>
        
-       	<script> 
-         
-         </script>    
-        	<div style='display:none'>
-    <div id="coins">
-    
-  
-    </div>
-   
-			<div id='inline_content' style='padding:10px;background:white;'>
+	<div style='display:none'>
+		<div id="coins"></div>
+ 
+		<div id='inline_content' style='padding:10px;background:white;'>
 	
-		                          <img src="img/btc.png" class="donate" id="btc">
-                              <img src="img/doge.png" class="donate" id="doge">
-                              
-                              
-                              
-   <h2> Donate amount below ! </h2>
-    <input type="text" class="donatebox" id="donatebox">   <span id="currency">BTC</span>
-    <button id="donate">Donate !</button>
-			</div>
+			<img src="img/btc.png" class="donate" id="btc">
+			<img src="img/doge.png" class="donate" id="doge">
+
+			<h2>Donate to <span id="donate_artist_name"></span>!</h2>
+			<input type="text" class="donatebox" id="donatebox">
+			<span id="currency">BTC</span>
+			<button id="donate">Donate !</button>
 		</div>
+	</div>
         
         
         
@@ -107,47 +102,53 @@
 				link.appendChild(image);
 				link.appendChild(a);
 
-				$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "'>Donate!</a>");
+				$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "'>Donate!</a>");
 
 				artistsFragment.appendChild(link);
 
 			    });
 
-			    $('#toplist-artists').append(artistsFragment);
+				$('#toplist-artists').append(artistsFragment);
 
-			    $(".donate_artist").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+				$(".donate_artist").click(function () {
 
+					if ($( this ).data('artist_id') in ARTIST_ACCOUNTS) {
+
+						var bitcoinaddress = ARTIST_ACCOUNTS[$( this ).data('artist_id')];
+
+						$("#donate").click(function() {
+
+							$("#inline_content").html = $("#donatebox").val() + "donated!";
+
+							// To artist
+							sendToAddress(bitcoinaddress, $("#donatebox").val()*0.98,
+								function(res) { alert("derpaderp" + res.result); }
+							);
+
+							// Our share
+							sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
+								function(res) { return; }
+							);  
+							
+							alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
+							
+							console.log($("#currency").text());
+							$("#inline_content").hide();
+
+						});
+
+						$("#donate_artist_name").html($( this ).data('artist_name'));
+						$.colorbox({ inline: true, href: $("#inline_content"), inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+
+					} else {
+						alert("Artist not registered with Donefy!");
+					}
+				});
 			});
 		    });
-
-
-
 		});
 
 		$(function() {
-
-			// O HAI!
-			$("#donate").click(function() {
-				$("#inline_content").html = $("#donatebox").val() + "donated!";
-
-				sendToAddress("miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV",$("#donatebox").val()*0.98,
-					function(res) {
-						alert("derpaderp" + res.result);
-					}
-				);
-
-				sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
-					function(res) {
-						return;
-					}
-				);  
-				
-				alert( $("#donatebox").val() +     $("#currency").text() + "  donated, thank you !");
-				
-				console.log($("#currency").text());
-				$("#inline_content").hide();
-			});
-
 
 			$("#btc").click(function() {
 				$("#inline_content").css("background","#f7931a");
@@ -181,8 +182,5 @@
 
 		});
 	</script>      
-  
-  
-  
     </body>
 </html>
