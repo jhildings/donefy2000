@@ -39,7 +39,7 @@
   "SupportedLanguages": [
     "en"
   ],
-  "VendorIdentifier": "com.spotify"
+  "VendorIdentifier": "com.spotify",
   "RequiredPermissions": [
 	"http://193.13.100.197"	  
   ]	
