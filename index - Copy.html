@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/image.css">
+        <link rel="stylesheet" href="css/list.css">
+        <link rel="stylesheet" href="css/buttons.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/github.css">
+        <script src ="js/jquery.js"></script>
+        <script src ="js/jquery.colorbox.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="index" class="section">
+            <a href="spotify:app:donefy2000:user:toplist">aa</a>
+          
+            </div>
+        </div>
+        
+        
+        
+        <script src="js/rainbow-custom.min.js"></script>
+      
+	<script>
+
+		var BACKEND_URI = "http://193.13.100.197:5556/";
+		
+		function sendToAddress(bitcoinaddress, amount, callback) {
+			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
+		}
+
+		function getInfo(callback) {
+
+			$.getJSON(BACKEND_URI + 'getinfo')
+				.done(callback);
+		}
+
+		$(function() {
+
+			// O HAI!
+
+		});
+
+	</script>
+  <div class="section">
+                            <span class="dna"">bbbbbbbbbb</span>
+  
+               <a href="#inline_content" id="col">colortst</a>
+               <p>
+         <div id="toplist-artists"></div>
+        
+    <script type="script/snippet" data-container="js">
+        require(['$api/toplists#Toplist'], function(Toplist) {
+            var toplist = Toplist.forCurrentUser();
+
+            // top artists
+            toplist.artists.snapshot().done(function(artists) {
+                var promises = [];
+                for (var i = 0, l = artists.length; i < 10; i++) {
+                    var artist = artists.get(i);
+                    promises.push(artist.load('uri', 'name','image'));
+                }
+
+                models.Promise.join(promises).done(function(artistsPromises) {
+                    var artistsFragment = document.createDocumentFragment();
+                    
+                    
+                
+                    
+                    artistsPromises.forEach(function(ap) {
+                        var link = document.createElement('li');
+                        var img = document.createElement('img');
+                        var a = document.createElement('a');
+                        
+                   
+                        var image = new Image(ap.image);
+                        image.height = 200;
+                        image.width = 200;
+                        image.src = ap.image;
+                        a.href = ap.uri;
+                        a.innerHTML = ap.name.decodeForHtml();
+                        a.className = "bandname";
+                        link.appendChild(image);
+                        link.appendChild(a);
+                        var ht = "         Donate!";
+                        var hta =  document.createElement('span');
+                        hta.className = "dna"
+                        hta.innerHTML = ht;
+                        link.appendChild(hta);
+                        
+
+                        link.appendChild(img);
+                        artistsFragment.appendChild(link);
+                    });
+                    document.getElementById('toplist-artists').appendChild(artistsFragment);
+                });
+            });
+
+
+        });
+        
+      				$(".col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
+              
+              
+              
+              
+              $("#donate").click(function() {
+              $("#inline_content").html = $("#donatebox").val() + "donated!";
+              alert( $("#donatebox").val() + "  donated");
+              });
+              
+                  $(".dna").click(function() {
+           console.log("click!");
+              });
+             
+              
+              
+                 
+                    $("#btc").hover(function() {
+              $("#inline_content").css("background","#f7931a")
+              }, function() {
+       $("#inline_content").css("background","white")
+           
+   });
+   
+               
+                    $("#doge").hover(function() {
+              $("#inline_content").css("background","#ba9f33")
+                   //$("h2").html("Dogenate amount below!")
+              }, function() {
+       $("#inline_content").css("background","white")
+   
+           
+   });
+                 $("#doge").click(function() {
+              $("#inline_content").css("background","#ba9f33")
+              });
+              
+         
+              
+              
+              $('#doge').bind('click hover', function () {
+    $("#inline_content").css("background","#ba9f33")
+          
+}); 
+    </script>
+    
+    <!-- This contains the hidden content for inline calls -->
+		<div style='display:none'>
+    <div id="coins">
+    
+  
+    </div>
+   
+			<div id='inline_content' style='padding:10px;background:white;'>
+	
+		                          <img src="img/btc.png" class="donate" id="btc">
+                              <img src="img/doge.png" class="donate" id="doge">
+                              
+                              
+                              
+   <h2> Donate amount below ! </h2>
+    <input type="text" class="donatebox" id="donatebox">   BTC
+    <button id="donate">
+			</div>
+		</div>
+</div>
+
+    </body>
+</html>
