@@ -5,6 +5,7 @@
          <div id="toplist-artists"></div>
         
     <script type="script/snippet" data-container="js">
+
         require(['$api/toplists#Toplist'], function(Toplist) {
             var toplist = Toplist.forCurrentUser();
 
@@ -38,7 +39,7 @@
                         link.appendChild(a);
                         var ht = "Donate!";
                         var hta =  document.createElement('span');
-                        hta.innerHTML = "<span>" + ht +"</span>";;
+                        hta.innerHTML = "<span id='donate' data-artist_id='" + ap.uri + "'>" + ht +"</span>";;
                         link.appendChild(hta);
                         
 
@@ -52,11 +53,12 @@
 
         });
         
-      				$("#col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
-              $("#donate").click(function() {
-              $("#inline_content").html = $("#donatebox").val() + "donated!";
-              alert( $("#donatebox").val() + "  donated");
-              });
+		$("#col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
+		$("#donate").click(function() {
+			console.log($(this).data('artist_id'));
+			$("#inline_content").html = $("#donatebox").val() + "donated!";
+			alert( $("#donatebox").val() + "  donated");
+		});
               
               
                $("#btc").click(function() {
