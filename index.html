@@ -21,47 +21,59 @@
        
        	<script> 
          
-         $("#col").colorbox({inline:true, width:"70%", closeButton:false, opacity:0.8});
-  
-
         require(['$api/toplists#Toplist','$api/models'], function(Toplist,models) {
 
             var toplist = Toplist.forCurrentUser();
 
-
             // top artists
             toplist.artists.snapshot().done(function(artists) {
+
                 var promises = [];
+
                 for (var i = 0, l = artists.length; i < l; i++) {
                     var artist = artists.get(i);
                     promises.push(artist.load('uri', 'name','image'));
                 }
 
                 models.Promise.join(promises).done(function(artistsPromises) {
+
                     var artistsFragment = document.createDocumentFragment();
+
                     artistsPromises.forEach(function(ap) {
+
                         var link = document.createElement('li');
                         var a = document.createElement('a');
-                        
-                   
+
                         var image = new Image(ap.image);
                         image.height = 200;
                         image.width = 200;
                         image.src = ap.image;
+
                         a.href = ap.uri;
                         a.innerHTML = ap.name.decodeForHtml();
                         a.className = "bandname";
+
                         link.appendChild(image);
                         link.appendChild(a);
-                        var ht = "Donate!";
-                        var hta =  document.createElement('span');
-                        hta.innerHTML = "<span id='donate' data-artist_id='" + ap.uri + "'>" + ht +"</span>";
-                        link.appendChild(hta);
+
+                        $( link ).append("<a href='#inline_content' class='donate' data-artist_id='" + ap.uri + "'>Donate!</a>");
+
                         artistsFragment.appendChild(link);
+
                     });
+
                     $('#toplist-artists').append(artistsFragment);
+
+        	    $(".donate").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+/*
+		    $(".donate").click(function() {
+			    alert($(this).data('artist_id'));
+		    });
+*/
+
                 });
             });
+
 
 
         });
@@ -93,6 +105,9 @@
 	<script>
 
 		var BACKEND_URI = "http://193.13.100.197:5556/";
+		var ARTIST_ACCOUNTS = {
+			'spotify:artist:1PXHzxRDiLnjqNrRn2Xbsa': 'mu8KfJLHQo1a3HLEfYdVxnF8WsR2KxBr6k'
+		};
 		
 		function sendToAddress(bitcoinaddress, amount, callback) {
 			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
