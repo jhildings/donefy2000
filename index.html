@@ -20,12 +20,9 @@
 	<a href="#inline_content" id="col">colortst</a>
 
 	<div id="toplist-artists"></div>
-       
+
 	<div style='display:none'>
-		<div id="coins"></div>
- 
 		<div id='inline_content' style='padding:10px;background:white;'>
-	
 			<img src="img/btc.png" class="donate" id="btc">
 			<img src="img/doge.png" class="donate" id="doge">
 
@@ -33,6 +30,15 @@
 			<input type="text" class="donatebox" id="donatebox">
 			<span id="currency">BTC</span>
 			<button id="donate">Donate !</button>
+		</div>
+	</div>
+
+	<div style='display:none'>
+		<div id='donation_done' style='padding:10px;background:white;'>
+			<h2>Great success!</h2>
+			Your donation of <span id="success_amount"></span> <span id="success_currency"></span> was successfully sent!
+			<br>
+			Transaction ID: <span id="success_txid"></span>	
 		</div>
 	</div>
 
@@ -53,11 +59,9 @@
 
 		function sendToAddress(bitcoinaddress, amount, callback) {
 			$.getJSON(BACKEND_URI + 'sendtoaddress', { 'bitcoinaddress': bitcoinaddress, 'amount': amount }).done(callback);
-      
 		}
 
 		function getInfo(callback) {
-
 			$.getJSON(BACKEND_URI + 'getinfo')
 				.done(callback);
 		}
@@ -69,81 +73,85 @@
 			// top artists
 			toplist.artists.snapshot().done(function(artists) {
 
-			var promises = [];
+				var promises = [];
 
-			// Hardcode Dunderpatrullen -.-
-			promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
+				// Hardcode Dunderpatrullen -.-
+				promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
 
-			for (var i = 0, l = artists.length; i < l; i++) {
-				var artist = artists.get(i);
-				promises.push(artist.load('uri', 'name', 'image'));
-			}
+				for (var i = 0, l = artists.length; i < l; i++) {
+					var artist = artists.get(i);
+					promises.push(artist.load('uri', 'name', 'image'));
+				}
 
-			models.Promise.join(promises).done(function(artistsPromises) {
+				models.Promise.join(promises).done(function(artistsPromises) {
 
-				var artistsFragment = document.createDocumentFragment();
+					var artistsFragment = document.createDocumentFragment();
 
-				artistsPromises.forEach(function(ap) {
+					artistsPromises.forEach(function(ap) {
 
-					var link = document.createElement('li');
-					var a = document.createElement('a');
+						var link = document.createElement('li');
+						var a = document.createElement('a');
 
-					var image = new Image(ap.image);
-					image.height = 200;
-					image.width = 200;
-					image.src = ap.image;
+						var image = new Image(ap.image);
+						image.height = 200;
+						image.width = 200;
+						image.src = ap.image;
 
-					a.href = ap.uri;
-					a.innerHTML = ap.name.decodeForHtml();
-					a.className = "bandname";
+						a.href = ap.uri;
+						a.innerHTML = ap.name.decodeForHtml();
+						a.className = "bandname";
 
-					link.appendChild(image);
-					link.appendChild(a);
+						link.appendChild(image);
+						link.appendChild(a);
 
-					$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "'>Donate!</a>");
+						$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "' data-artist_name='" + ap.name.decodeForHtml() + "'>Donate!</a>");
 
-					artistsFragment.appendChild(link);
+						artistsFragment.appendChild(link);
 
-				});
+					});
 
-				$('#toplist-artists').append(artistsFragment);
+					$('#toplist-artists').append(artistsFragment);
 
-				$(".donate_artist").click(function () {
+					$(".donate_artist").click(function () {
 
-					if ($( this ).data('artist_id') in ARTIST_ACCOUNTS) {
+						if ($( this ).data('artist_id') in ARTIST_ACCOUNTS) {
 
-						var bitcoinaddress = ARTIST_ACCOUNTS[$( this ).data('artist_id')];
+							var bitcoinaddress = ARTIST_ACCOUNTS[$( this ).data('artist_id')];
 
-						$("#donate").click(function() {
+							$("#donate").click(function() {
 
-							$("#inline_content").html = $("#donatebox").val() + "donated!";
+								$("#inline_content").html = $("#donatebox").val() + "donated!";
 
-							// To artist
-							sendToAddress(bitcoinaddress, $("#donatebox").val()*0.98,
-								function(res) { alert("derpaderp" + res.result); }
-							);
+								// To artist
+								sendToAddress(bitcoinaddress, $("#donatebox").val()*0.98,
+									function(res) {
+										$("#success_currency").html($("#currency").text());
+										$("#success_amount").html($("#donatebox").val());
+										$("#success_txid").html(res.result);
+										$.colorbox({ inline: true, href: $("#donation_done"), width: "70%", opacity: "0.8" });
+									}
+								);
 
-							// Our share
-							sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
-								function(res) { return; }
-							);  
-							
-							alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
-							
-							console.log($("#currency").text());
-							$("#inline_content").hide();
+								// Our share
+								sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
+									function(res) { return; }
+								);
 
-						});
+								$("#inline_content").hide();
+								
+								alert( $("#donatebox").val() + " " + $("#currency").text() + " donated, thank you !");
 
-						$("#donate_artist_name").html($( this ).data('artist_name'));
-						$.colorbox({ inline: true, href: $("#inline_content"), inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+							});
 
-					} else {
-						alert("Artist not registered with Donefy!");
-					}
+							$("#donate_artist_name").html($( this ).data('artist_name'));
+							$.colorbox({ inline: true, href: $("#inline_content"), width: "70%", closeButton: false, opacity: 0.8 });
+
+						} else {
+							alert("Artist not registered with Donefy!");
+						}
+					});
 				});
 			});
-		    });
 		});
 
 		$(function() {
@@ -176,9 +184,9 @@
 
 			$('#doge').bind('click hover', function () {
 				$("#inline_content").css("background","#ba9f33");
-			});    
+			});
 
 		});
-	</script>      
+	</script> 
     </body>
 </html>
