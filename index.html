@@ -21,60 +21,6 @@
        
        	<script> 
          
-        require(['$api/toplists#Toplist','$api/models', '$api/models#Artist'], function(Toplist, models, Artist) {
-
-            var toplist = Toplist.forCurrentUser();
-
-            // top artists
-            toplist.artists.snapshot().done(function(artists) {
-
-                var promises = [];
-
-		// Hardcode Dunderpatrullen -.-
-		promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
-
-                for (var i = 0, l = artists.length; i < l; i++) {
-                    var artist = artists.get(i);
-                    promises.push(artist.load('uri', 'name', 'image'));
-                }
-
-                models.Promise.join(promises).done(function(artistsPromises) {
-
-                    var artistsFragment = document.createDocumentFragment();
-
-                    artistsPromises.forEach(function(ap) {
-
-                        var link = document.createElement('li');
-                        var a = document.createElement('a');
-
-                        var image = new Image(ap.image);
-                        image.height = 200;
-                        image.width = 200;
-                        image.src = ap.image;
-
-                        a.href = ap.uri;
-                        a.innerHTML = ap.name.decodeForHtml();
-                        a.className = "bandname";
-
-                        link.appendChild(image);
-                        link.appendChild(a);
-
-                        $( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "'>Donate!</a>");
-
-                        artistsFragment.appendChild(link);
-
-                    });
-
-                    $('#toplist-artists').append(artistsFragment);
-
-        	    $(".donate_artist").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
-
-                });
-            });
-
-
-
-        });
          </script>    
         	<div style='display:none'>
     <div id="coins">
@@ -120,64 +66,117 @@
 				.done(callback);
 		}
 
+		require(['$api/toplists#Toplist','$api/models', '$api/models#Artist'], function(Toplist, models, Artist) {
+
+		    var toplist = Toplist.forCurrentUser();
+
+		    // top artists
+		    toplist.artists.snapshot().done(function(artists) {
+
+			var promises = [];
+
+			// Hardcode Dunderpatrullen -.-
+			promises.push(Artist.fromURI('spotify:artist:1vhiRTDEXaBLR0J8O5YJQ8').load('uri', 'name', 'image'));
+
+			for (var i = 0, l = artists.length; i < l; i++) {
+			    var artist = artists.get(i);
+			    promises.push(artist.load('uri', 'name', 'image'));
+			}
+
+			models.Promise.join(promises).done(function(artistsPromises) {
+
+			    var artistsFragment = document.createDocumentFragment();
+
+			    artistsPromises.forEach(function(ap) {
+
+				var link = document.createElement('li');
+				var a = document.createElement('a');
+
+				var image = new Image(ap.image);
+				image.height = 200;
+				image.width = 200;
+				image.src = ap.image;
+
+				a.href = ap.uri;
+				a.innerHTML = ap.name.decodeForHtml();
+				a.className = "bandname";
+
+				link.appendChild(image);
+				link.appendChild(a);
+
+				$( link ).append("<a href='#inline_content' class='donate_artist' data-artist_id='" + ap.uri + "'>Donate!</a>");
+
+				artistsFragment.appendChild(link);
+
+			    });
+
+			    $('#toplist-artists').append(artistsFragment);
+
+			    $(".donate_artist").colorbox({ inline: true, width: "70%", closeButton: false, opacity: 0.8 });
+
+			});
+		    });
+
+
+
+		});
+
 		$(function() {
 
 			// O HAI!
+			$("#donate").click(function() {
+				$("#inline_content").html = $("#donatebox").val() + "donated!";
+
+				sendToAddress("miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV",$("#donatebox").val()*0.98,
+					function(res) {
+						alert("derpaderp" + res.result);
+					}
+				);
+
+				sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr", $("#donatebox").val()*0.02,
+					function(res) {
+						return;
+					}
+				);  
+				
+				alert( $("#donatebox").val() +     $("#currency").text() + "  donated, thank you !");
+				
+				console.log($("#currency").text());
+				$("#inline_content").hide();
+			});
+
+
+			$("#btc").click(function() {
+				$("#inline_content").css("background","#f7931a");
+				$("#currency").text("BTC");
+			});
+
+			$("#btc").hover(function() {
+				$("#inline_content").css("background","#f7931a");
+				$("body").css("font-family","Arial");
+				$("h2").css("font-family","Arial");
+				$("#currency").text("BTC");
+			});
+
+			$("#doge").hover(function() {
+				$("#inline_content").css("background","#ba9f33")
+				$("body").css("font-family","Comic Sans MS")
+				$("h2").css("font-family","Comic Sans MS")
+				$("#currency").text("DOGE");
+				//$("h2").html("Dogenate amount below!")
+			});
+
+			$("#doge").click(function() {
+				$("#inline_content").css("background","#ba9f33");
+				$("#currency").text("DOGE");
+			});
+
+
+			$('#doge').bind('click hover', function () {
+				$("#inline_content").css("background","#ba9f33");
+			});    
 
 		});
-     $("#donate").click(function() {
-			  	$("#inline_content").html = $("#donatebox").val() + "donated!";
-          sendToAddress("miuatHBHLxPCy7bc1PrgdnbK3kiTR519oV",$("#donatebox").val()*0.98 ,function(res)
-                  {
-                  alert("derpaderp" + res.result);
-                  
-                  });
-          sendToAddress("myovDiGGoaV3cWgYhKqVSm2Z3STAybLLXr",$("#donatebox").val()*0.02 ,function(res)
-                  {
-                      return;
-                  
-                  });  
-			alert( $("#donatebox").val() +     $("#currency").text() + "  donated, thank you !");
-      console.log($("#currency").text())
-     	$("#inline_content").hide(); 
-		});
-    
-                 
-               $("#btc").click(function() {
-              $("#inline_content").css("background","#f7931a")
-              $("#currency").text("BTC");
-              });
-              
-              
-                 
-                    $("#btc").hover(function() {
-              $("#inline_content").css("background","#f7931a")
-                $("body").css("font-family","Arial")
-                $("h2").css("font-family","Arial")
-                 $("#currency").text("BTC");
-              });
-   
-               
-                    $("#doge").hover(function() {
-              $("#inline_content").css("background","#ba9f33")
-              $("body").css("font-family","Comic Sans MS")
-                $("h2").css("font-family","Comic Sans MS")
-              $("#currency").text("DOGE");
-                   //$("h2").html("Dogenate amount below!")
-              });
-                 $("#doge").click(function() {
-              $("#inline_content").css("background","#ba9f33")
-              $("#currency").text("DOGE");
-              });
-              
-         
-              //ba9f33
-              
-              
-              $('#doge').bind('click hover', function () {
-    $("#inline_content").css("background","#ba9f33")
-          
-});    
 	</script>      
   
   
